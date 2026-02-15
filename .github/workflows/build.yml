@@ -1,0 +1,41 @@
+name: Build Flet APK
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Install dependencies
+        run: |
+          uv sync
+
+      - name: Build APK
+        uses: flet-dev/flet-build-action@v1
+        with:
+          target: apk
+          # Indicamos que el código fuente está en la carpeta src
+          project_dir: src
+          # Si tu archivo principal se llama distinto a main.py,
+          # puedes añadir: args: src/nombre_de_tu_archivo.py
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: notas-locas-apk
+          # La carpeta build se genera usualmente en la raíz
+          path: build/apk/*.apk
