@@ -48,7 +48,7 @@ jobs:
       # Apuntamos a src/main.py explícitamente
       - name: Build APK
         run: |
-          flet build apk src/main.py --verbose
+          yes | flet build apk src/main.py --verbose
 
       # 7. Subir el APK como artefacto para descargar
       - name: Upload APK Artifact
